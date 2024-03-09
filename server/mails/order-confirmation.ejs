@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Reply Notification</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="message-sm">
+        <h1>Your E-learning order is confirmed!</h1>
+        <p>And we are just as excited as you are</p>
+      </div>
+      <br />
+      <br />
+      <div class="course-into">
+        <h4>Here what you ordered:</h4>
+        <table style="border-bottom: 1xp solid #000">
+          <tr>
+            <td>Order #: <%= order._id %></td>
+            <td>Order Date: <%= order.date %></td>
+          </tr>
+        </table>
+
+        <table style="width: 90%; margin: auto; display: block">
+          <tr>
+            <td class="first-td">Item</td>
+            <td class="first-td">Qty</td>
+            <td class="first-td">Cost</td>
+          </tr>
+        </table>
+        <table style="width: 90%; margin: auto; display: block">
+          <tr>
+            <td class="secound-td"><%= order.name %></td>
+            <td class="secound-td">1</td>
+            <td class="secound-td"><%= order.price %></td>
+          </tr>
+        </table>
+
+        <table class="table-row" style="border-top: 1px solid #000">
+          <tr>
+            <td class="col-2">Subtotal:</td>
+            <td class="col-2">$ <%= order.price %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="footer">
+        <p>
+          If you have any Question, Please contact our support team at
+          <a href="mailto:abdurrahim196679@gamil.com"
+            >abdurrahim196679@gamil.com</a
+          >
+        </p>
+        <p>&copy; 2024 RS_Learning, All right reserved</p>
+      </div>
+    </div>
+  </body>
+</html>
