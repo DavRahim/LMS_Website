@@ -3,8 +3,9 @@ import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import avatarIcon from "../../../public/assets/client-2.jpg"
-import { useUpdateAvatarMutation } from "@/redux/features/user/userApi";
+import { useUpdateAvatarMutation, useEditProfileMutation } from "@/redux/features/user/userApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import toast from "react-hot-toast";
 type Props = {
     avatar: string | null;
     user: any
@@ -17,7 +18,8 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
 
     const { } = useLoadUserQuery(undefined, {
         skip: loadUser ? false : true
-    })
+    });
+    const [editProfile, { isSuccess: editProfileSuccess, error: editProfileError }] = useEditProfileMutation()
 
     const imageHandler = async (e: any) => {
 
@@ -32,17 +34,25 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     }
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess || editProfileSuccess) {
             setLoadUser(true)
         }
-        if (error) {
+        if (error || editProfileError) {
             console.log(error);
         }
-    }, [isSuccess, error]);
+        if (editProfileSuccess){
+            toast.success("Profile update successfully")
+        }
+
+    }, [isSuccess, error, editProfileError, editProfileSuccess]);
 
 
     const handleSubmit = async (e: any) => {
-        console.log("submit");
+        if (name !== "") {
+            editProfile({
+                name: name,
+            })
+        }
     }
 
     return (
