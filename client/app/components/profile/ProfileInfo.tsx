@@ -1,8 +1,10 @@
 import { styles } from "@/app/styles/styles";
 import Image from "next/image";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import avatarIcon from "../../../public/assets/client-2.jpg"
+import { useUpdateAvatarMutation } from "@/redux/features/user/userApi";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 type Props = {
     avatar: string | null;
     user: any
@@ -10,10 +12,34 @@ type Props = {
 
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     const [name, setName] = useState(user && user.name);
+    const [updateAvatar, { isSuccess, error }] = useUpdateAvatarMutation();
+    const [loadUser, setLoadUser] = useState(false)
+
+    const { } = useLoadUserQuery(undefined, {
+        skip: loadUser ? false : true
+    })
 
     const imageHandler = async (e: any) => {
-        console.log(e);
+
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            const avatar = fileReader.result
+            if (fileReader.readyState === 2) {
+                updateAvatar(avatar)
+            }
+        }
+        fileReader.readAsDataURL(e.target.files[0])
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setLoadUser(true)
+        }
+        if (error) {
+            console.log(error);
+        }
+    }, [isSuccess, error]);
+
 
     const handleSubmit = async (e: any) => {
         console.log("submit");
@@ -27,6 +53,8 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                     <Image
                         src={user.avatar || avatar ? user?.avatar.url || avatar : avatarIcon}
                         alt=""
+                        width={120}
+                        height={120}
                         className="w-[120px] h-[120px] cursor-pointer border-[3px] border-[#37a39a] rounded-full"
                     />
                     <input type="file" name="" id="avatar" className="hidden" onChange={imageHandler} accept="image/png,image/jpg,image/jpeg, image/webp" />

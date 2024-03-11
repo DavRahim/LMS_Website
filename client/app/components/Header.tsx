@@ -98,9 +98,12 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                                 user ? (
                                     <Link href={"/profile"}>
                                         <Image
-                                            src={user.avatar ? user.avatar : avatar}
+                                            src={user.avatar ? user.avatar.url : avatar}
                                             alt=''
+                                            width={30}
+                                            height={30}
                                             className='w-[30px] h-[30] rounded-full cursor-pointer'
+                                            style={{ border: activeItem === 5 ? "2px solid #ffc107" : "none" }}
                                         />
                                     </Link>
                                 ) : <HiOutlineUserCircle size={25} className='hidden 800px:block cursor-pointer dark:text-white text-black'
