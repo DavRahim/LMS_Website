@@ -470,7 +470,7 @@ const Item: FC<itemProps> = ({ title, to, icon, selected, setSelected }) => {
 
 
 
-const Sidenav = () => {
+const AdminSidebar = () => {
   const { user } = useSelector((state: any) => state.auth);
   const [logout, setLogout] = useState(false);
   // const [isCollapsed, setIsCollapsed] = useState(false);
@@ -698,4 +698,4 @@ const Sidenav = () => {
     </>
   );
 }
-export default Sidenav
+export default AdminSidebar
