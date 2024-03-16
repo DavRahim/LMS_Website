@@ -51,6 +51,7 @@ const CourseInformation: FC<Props> = ({ active, courseInfo, setActive, setCourse
             reader.readAsDataURL(file)
         }
     }
+// console.log(handleDrop)
 
     return (
         <div className="w-[80%] m-auto mt-24">
