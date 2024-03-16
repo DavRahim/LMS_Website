@@ -18,7 +18,7 @@ const page = (props: Props) => {
     description="ELearning is a Platfrom for student"
     keywords="programming,stack"
     />
-        <div className="flex h-[200vh]">
+        <div className="flex h-[300vh]">
           <div className="1500px:w-[16%] w-1/5">
            <AdminSidebar/>
         </div>
