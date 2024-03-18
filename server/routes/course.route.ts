@@ -40,7 +40,7 @@ courseRouter.put("/add-answer", updateAccessToken, isAuthenticated, addAnswer);
 courseRouter.put("/add-review/:id", updateAccessToken, isAuthenticated, addReview);
 courseRouter.put("/add-reply/", updateAccessToken, isAuthenticated, authorizeRole("admin"), addReplyToReview);
 courseRouter.get(
-  "/get-coursess/",
+  "/get-coursess",
   updateAccessToken,
   isAuthenticated,
   authorizeRole("admin"),
