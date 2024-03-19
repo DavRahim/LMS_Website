@@ -8,12 +8,13 @@ type Props = {
   active: number;
   setActive: (active: number) => void;
   courseData: any;
-  handleCourseCreate: any
+  handleCourseCreate: any;
+  isEdit: boolean
 };
 
-const CoursePreview: FC<Props> = ({ active, courseData, handleCourseCreate, setActive }) => {
+const CoursePreview: FC<Props> = ({ active, courseData, handleCourseCreate, setActive, isEdit }) => {
 
-  const discountPercentage = ((courseData?.estimatedPrice - courseData?.price) / courseData?.estimatedPrice) * 100;
+  const discountPercentage = ((courseData?.estimatePrice - courseData?.price) / courseData?.estimatePrice) * 100;
 
 
   const discountPercentagePrice = discountPercentage.toFixed(0)
@@ -45,7 +46,7 @@ const CoursePreview: FC<Props> = ({ active, courseData, handleCourseCreate, setA
 
           </h1>
           <h5 className="pl-3 text-[20px] mt-3 line-through opacity-85">
-            {courseData?.estimatedPrice}
+            {courseData?.estimatePrice}
 
           </h5>
           <h4 className="pl-5 pt-4 text-[22px]">
@@ -159,7 +160,9 @@ const CoursePreview: FC<Props> = ({ active, courseData, handleCourseCreate, setA
 
         </div>
         <div className="w-full 800px:w-[100px] flex justify-center items-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded cursor-pointer" onClick={() => createCourse()}>
-          Next
+          {
+            isEdit ? "Update" : "Create"
+          }
 
         </div>
 

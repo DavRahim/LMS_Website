@@ -1,16 +1,20 @@
 import { Box, Button } from "@mui/material";
 import { useTheme } from "next-themes";
-import React from "react";
+import React, { FC, useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineMail } from "react-icons/ai";
 import { format } from "timeago.js";
 import Loader from "../../Loader";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetAllUsersQuery } from "@/redux/features/user/userApi";
+import { styles } from "@/app/styles/styles";
 
-type Props = {};
+type Props = {
+    isTeam: boolean;
+};
 
-const AllUsers = (props: Props) => {
+const AllUsers: FC<Props> = ({ isTeam }) => {
     const { theme, setTheme } = useTheme();
+    const [active, setActive] = useState(false)
 
     const { isLoading, data, error, isSuccess } = useGetAllUsersQuery({})
 
@@ -47,7 +51,7 @@ const AllUsers = (props: Props) => {
                 return (
                     <>
                         <a
-                        href={`mailto:${params.row.email}`}>
+                            href={`mailto:${params.row.email}`}>
                             <AiOutlineMail
                                 className="dark:text-white text-black"
                                 size={20}
@@ -60,7 +64,21 @@ const AllUsers = (props: Props) => {
     ]
 
     const rows: any = []
-    {
+
+    if (isTeam) {
+        const newData = data && data.users.filter((item: any) => item.role === "admin")
+        newData && newData.forEach((item: any) => {
+            rows.push({
+                id: item._id,
+                name: item.name,
+                email: item.email,
+                role: item.role,
+                courses: item.courses.length,
+                create_at: format(item.createdAt)
+            })
+        })
+
+    } else {
         data && data.users.forEach((item: any) => {
             rows.push({
                 id: item._id,
@@ -71,7 +89,22 @@ const AllUsers = (props: Props) => {
                 create_at: format(item.createdAt)
             })
         })
+
     }
+
+
+    // {
+    //     data && data.users.forEach((item: any) => {
+    //         rows.push({
+    //             id: item._id,
+    //             name: item.name,
+    //             email: item.email,
+    //             role: item.role,
+    //             courses: item.courses.length,
+    //             create_at: format(item.createdAt)
+    //         })
+    //     })
+    // }
 
 
     return (
@@ -81,6 +114,11 @@ const AllUsers = (props: Props) => {
                 isLoading ? (
                     <Loader />
                 ) : (<Box m="20px">
+                    <div className="w-full flex justify-end">
+                            <div className={`${styles.button} !w-[200px] dark:text-white`} onClick={() => setActive(!active)}>
+                            Add New Member
+                        </div>
+                    </div>
                     <Box m={"40px 0 0 0"}
                         height={"80vh"}
                         sx={{

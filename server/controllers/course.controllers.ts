@@ -17,13 +17,15 @@ export const uploadCourse = CatchAsyncError(
     try {
       const data = req.body;
       const thumbnail = data.thumbnail;
+      
       if (thumbnail) {
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "courses",
         });
+        console.log(myCloud);
         data.thumbnail = {
           public_id: myCloud.public_id,
-          utl: myCloud.secure_url,
+          url: myCloud.secure_url,
         };
       }
 
@@ -41,19 +43,26 @@ export const editCourse = CatchAsyncError(
     try {
       const data = req.body;
       const thumbnail = data.thumbnail;
+      const courseId = req.params.id;
 
-      if (thumbnail) {
+      const courseData = await CourseModel.findById(courseId) as any;
+
+
+      if (thumbnail && !thumbnail.startsWith("https")) {
         await cloudinary.v2.uploader.destroy(thumbnail.public_id);
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "courses",
         });
+
+      }
+      if (thumbnail.startsWith("https")) {
         data.thumbnail = {
-          public_id: myCloud.public_id,
-          url: myCloud.url,
+          public_id: courseData.public_id,
+          url: courseData.url,
         };
+
       }
 
-      const courseId = req.params.id;
 
       const course = await CourseModel.findByIdAndUpdate(
         courseId,
@@ -417,7 +426,7 @@ export const addReplyToReview = CatchAsyncError(
 );
 
 // get all course --- only for admin
-export const getAllCoursess = CatchAsyncError(
+export const getAdminAllCourses = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllCoursesService(res);
@@ -452,27 +461,27 @@ export const deletedCourse = CatchAsyncError(
 );
 // generate video url
 
-export const generateVideoUrl =CatchAsyncError(async(req:Request, res:Response, next:NextFunction) => {
+export const generateVideoUrl = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
   console.log("api hitting");
 
   try {
-    const {videoId} = req.body
+    const { videoId } = req.body
     const response = await axios.post(
       `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
-      {ttl: 300},{
-        headers: {
-          Accept: "application/json","Content-Type":"application/json",
-          Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`
-        }
+      { ttl: 300 }, {
+      headers: {
+        Accept: "application/json", "Content-Type": "application/json",
+        Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`
       }
+    }
     )
 
     res.json(response.data)
-    
-  } catch (error:any) {
-     return next(new ErrorHandler(error.message, 400))
+
+  } catch (error: any) {
+    return next(new ErrorHandler(error.message, 400))
   }
-}) 
+})
 
 
 

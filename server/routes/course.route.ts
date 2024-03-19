@@ -8,8 +8,8 @@ import {
   deletedCourse,
   editCourse,
   generateVideoUrl,
+  getAdminAllCourses,
   getAllCourses,
-  getAllCoursess,
   getCourseByUser,
   getSingleCourse,
   uploadCourse,
@@ -35,21 +35,22 @@ courseRouter.put(
 courseRouter.get("/get-course/:id", getSingleCourse);
 courseRouter.get("/get-courses", getAllCourses);
 courseRouter.get("/get-course-content/:id", updateAccessToken, isAuthenticated, getCourseByUser);
-courseRouter.put("/add-question",updateAccessToken, isAuthenticated, addQuestion);
+courseRouter.put("/add-question", updateAccessToken, isAuthenticated, addQuestion);
 courseRouter.put("/add-answer", updateAccessToken, isAuthenticated, addAnswer);
 courseRouter.put("/add-review/:id", updateAccessToken, isAuthenticated, addReview);
 courseRouter.put("/add-reply/", updateAccessToken, isAuthenticated, authorizeRole("admin"), addReplyToReview);
 courseRouter.get(
-  "/get-coursess",
+  "/get-admin-Courses",
   updateAccessToken,
   isAuthenticated,
   authorizeRole("admin"),
-  getAllCoursess
+  getAdminAllCourses
 );
 courseRouter.post(
   "/getVdoChiperOTP",
   generateVideoUrl
 );
+
 
 
 courseRouter.delete(
