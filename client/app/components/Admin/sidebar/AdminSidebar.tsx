@@ -672,6 +672,12 @@ const AdminSidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Item title="FAQ"
+                to="/admin/faq"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
               <Typography
                 variant="h5"
                 sx={{ m: "15px 0 5px 20px" }}

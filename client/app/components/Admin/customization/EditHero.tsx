@@ -35,7 +35,7 @@ const EditHero = (props: Props) => {
       }
     }
 
-  }, [data, isSuccess, error])
+  }, [data, isSuccess, error, refetch])
 
 
   const handleChange = (e: any) => {

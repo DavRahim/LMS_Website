@@ -160,6 +160,7 @@ export const editLayout = CatchAsyncError(
 // get layout by type
 export const getLayoutByType = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("api faq");
     try {
       const { type } = req.params;
       const layout = await LayoutModel.findOne({ type });
