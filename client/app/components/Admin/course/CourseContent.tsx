@@ -216,6 +216,17 @@ const CourseContent: FC<Props> = ({ active, courseContentData, handleSubmit: han
 
                                                 </div>
                                                 <div className="my-3">
+                                                    <label className={styles.label}>Video Length</label>
+                                                    <input type="number"
+                                                        placeholder="Video Length 70:00..."
+                                                        className={`${styles.input}`} value={item.videoLength} onChange={(e) => {
+                                                            const updateData = [...courseContentData];
+                                                            updateData[index].videoLength = e.target.value;
+                                                            setCourseContentData(updateData)
+                                                        }} />
+
+                                                </div>
+                                                <div className="my-3">
                                                     <label className={styles.label}>Video Description</label>
                                                     <textarea rows={8} cols={30}
                                                         placeholder="Video url..."

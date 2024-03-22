@@ -1,5 +1,6 @@
 import { styles } from "@/app/styles/styles";
-import React, { FC, useState } from "react";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+import React, { FC, useEffect, useState } from "react";
 
 type Props = {
     courseInfo: any;
@@ -10,6 +11,15 @@ type Props = {
 
 const CourseInformation: FC<Props> = ({ active, courseInfo, setActive, setCourseInfo }) => {
     const [dragging, setDragging] = useState(false)
+    const { data } = useGetHeroDataQuery("categories", {});
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        if (data) {
+            setCategories(data?.layout?.categories)
+        }
+
+    }, [data])
+
     const handleSubmit = (e: any) => {
         e.preventDefault();
         setActive(active + 1);
@@ -51,7 +61,7 @@ const CourseInformation: FC<Props> = ({ active, courseInfo, setActive, setCourse
             reader.readAsDataURL(file)
         }
     }
-// console.log(handleDrop)
+    // console.log(handleDrop)
 
     return (
         <div className="w-[80%] m-auto mt-24">
@@ -121,20 +131,40 @@ const CourseInformation: FC<Props> = ({ active, courseInfo, setActive, setCourse
                     </div>
                 </div>
                 <br />
-                <div>
-                    <label htmlFor="" className={`${styles.label}`}>
-                        Course Tags
-                    </label>
-                    <input type="text"
-                        name=""
-                        required
-                        value={courseInfo.tags}
-                        onChange={(e: any) => setCourseInfo({ ...courseInfo, tags: e.target.value })}
-                        id="name"
-                        placeholder="MERN, stack, LMS, platform, next 13"
-                        className={`${styles.input}`}
-                    />
+                {/* start */}
+                <div className="w-full flex justify-between">
+                    <div className="w-[45%]">
+                        <label htmlFor="" className={`${styles.label}`}>
+                            Course Tags
+                        </label>
+                        <input type="text"
+                            name=""
+                            required
+                            value={courseInfo.tags}
+                            onChange={(e: any) => setCourseInfo({ ...courseInfo, tags: e.target.value })}
+                            id="name"
+                            placeholder="MERN, stack, LMS, platform, next 13"
+                            className={`${styles.input}`}
+                        />
+                    </div>
+                    <br />
+                    <div className="w-[50%]">
+                        <label htmlFor="" className={`${styles.label} w-[50%]`}>
+                            Course Categories
+                        </label>
+                        <select name="" id="" className={`${styles.input} dark:!text-white text-black bg-black`}
+                         value={courseInfo.category}
+                            onChange={(e: any) => setCourseInfo({ ...courseInfo, category:e.target.value})}>
+                            <option value="">Select Categories</option>
+                            {
+                                categories &&categories?.map((item: any) => (
+                                    <option value={item.title} key={item._id}>{item?.title}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
                 </div>
+                {/* end */}
                 <div className="w-full flex justify-between">
                     <div className="w-[45%]">
                         <label htmlFor="" className={`${styles.label}`}>

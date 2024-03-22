@@ -32,8 +32,7 @@ const EditFaq = (props: Props) => {
       }
     }
 
-  }, [data, isSuccess, error]);
-  console.log(question);
+  }, [data, isSuccess, error, refetch]);
 
   const toggleQuestion = (id: any) => {
     setQuestion((prevQuestion) => prevQuestion.map((q) => (q._id === id ? { ...q, active: !q.active } : q)))

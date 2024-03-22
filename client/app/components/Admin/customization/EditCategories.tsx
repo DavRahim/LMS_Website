@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Loader from "../../Loader";
 import { styles } from "@/app/styles/styles";
 import { AiOutlineDelete } from "react-icons/ai";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import toast from "react-hot-toast";
 
 type Props = {};
 
@@ -15,13 +17,53 @@ const EditCategories = (props: Props) => {
         if (data) {
             setCategories(data?.layout.categories)
         }
+        if (isSuccess) {
+            refetch()
+            toast.success("Category update successfully")
+        }
 
-    }, [data])
+        if (error) {
+            if ("data" in error) {
+                const errorData = error as any;
+                toast.error(errorData?.data?.message)
+            }
+        }
+
+    }, [data, isSuccess, refetch, , error])
 
     const handleCategoriesAdd = (id: any, value: string) => {
         setCategories((prevCategory: any) => prevCategory.map((i: any) => (i._id === id ? { ...i, title: value } : i))
         )
 
+    }
+
+    const newCategoriesHandler = () => {
+        if (categories[categories.length - 1].title === "") {
+            toast.error("Category title cannot be empty")
+        } else {
+            setCategories((prevCategory: any) => [...prevCategory, { title: "" }])
+        }
+    }
+
+    // function to check if the FAQ arrays are unchanged
+    const areCategoriesIsUnchanged = (originalCategories: any[], newCategories: any[]) => {
+
+        return JSON.stringify(originalCategories) === JSON.stringify(newCategories)
+
+    }
+
+    const isAnyCategoriesTitleEmpty = (categories: any[]) => {
+
+        return categories.some((c) => c.title === "")
+    }
+
+    const editCategoriesHandler = async () => {
+        if (!areCategoriesIsUnchanged(data.layout.categories, categories) && !isAnyCategoriesTitleEmpty(categories)) {
+            await editLayout({
+                type: "categories",
+                categories
+            })
+        }
     }
 
     return (
@@ -45,6 +87,18 @@ const EditCategories = (props: Props) => {
                                 )
                             })
                         }
+
+                        <br />
+                        <br />
+                        <div className="w-full flex justify-center">
+                            <IoMdAddCircleOutline className="dark:text-white text-black text-[25px] cursor-pointer" onClick={newCategoriesHandler} />
+
+
+                        </div>
+                        <div className={`${styles.button} !w-[100px] !min-h-[40px] dark:text-white text-black bg-[#cccccc34] ${areCategoriesIsUnchanged(data.layout.categories, categories) || isAnyCategoriesTitleEmpty(categories) ? "!cursor-not-allowed" : "!cursor-pointer !bg-[#42d383]"} !rounded absolute bottom-12 right-12`} onClick={areCategoriesIsUnchanged(data.layout.categories, categories) || isAnyCategoriesTitleEmpty(categories) ? () => null : editCategoriesHandler}>
+                            Save
+
+                        </div>
 
                     </div>
 

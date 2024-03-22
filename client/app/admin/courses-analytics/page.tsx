@@ -1,32 +1,32 @@
 "use client"
-import DashboardHero from "@/app/components/Admin/DashboardHero";
+
+import DashboardHeader from "@/app/components/Admin/DashboardHeader";
+import CourseAnalytics from "@/app/components/Admin/analytics/CourseAnalytics";
 import AdminSidebar from "@/app/components/Admin/sidebar/AdminSidebar";
-import AllUsers from "@/app/components/Admin/users/AllUsers";
-import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import React from "react";
 
 type Props = {};
 
 const page = (props: Props) => {
-    return (<div>
-        <AdminProtected>
+    return (
+        <div>
             <Heading
                 title="ELeaning - Admin"
                 description="ELearning is a Platform for student"
                 keywords="programming,stack"
             />
-            <div className="flex h-screen">
-                <div className="1500px:w-[16%] w-1/5">
+            <div className="w-full flex h-[200vh]">
+                <div className="1500px:w-[16%] w-1/5 ">
                     <AdminSidebar />
                 </div>
                 <div className="w-[85%]">
-                    <DashboardHero />
-                    <AllUsers />
+                    <DashboardHeader />
+                    <CourseAnalytics />
                 </div>
             </div>
-        </AdminProtected>
-    </div>);
+        </div>
+    );
 };
 
 export default page;
