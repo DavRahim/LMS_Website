@@ -212,7 +212,7 @@ export const addQuestion = CatchAsyncError(
       await NotificationModel.create({
         user: req.user?._id,
         title: "New Question Received",
-        message: `You have a new Question in ${courseContent?.tittle}`,
+        message: `You have a new Question in ${courseContent?.title}`,
       });
 
       // save the update course;
@@ -277,12 +277,12 @@ export const addAnswer = CatchAsyncError(
         await NotificationModel.create({
           user: req.user?._id,
           title: "New Question Received",
-          message: `You have a new Question in ${courseContent?.tittle}`,
+          message: `You have a new Question in ${courseContent?.title}`,
         });
       } else {
         const data = {
           name: question.user.name,
-          title: courseContent.tittle,
+          title: courseContent.title,
         };
         const html = await ejs.renderFile(
           path.join(__dirname, "../mails/question-reply.ejs"),
