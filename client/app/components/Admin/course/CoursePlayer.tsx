@@ -16,7 +16,7 @@ const CoursePlayer:FC<Props> = ({title, videoUrl}) => {
   console.log(videoUrl);
 
   useEffect(()=>{
-    axios.post(`http://192.168.0.101:4000/api/v1/getVdoChiperOTP`,{
+    axios.post(`http://192.168.0.103:4000/api/v1/getVdoChiperOTP`,{
       videoId: videoUrl
     }).then((res)=>{
 
