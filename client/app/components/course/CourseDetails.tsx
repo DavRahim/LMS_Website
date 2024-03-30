@@ -9,6 +9,9 @@ import CourseContentList from "./CourseContentList";
 import { Elements } from "@stripe/react-stripe-js"
 import CheckOutForm from "../payment/CheckOutForm";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Image from "next/image";
+import { format } from "timeago.js";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 type Props = {
     data: any;
@@ -18,10 +21,10 @@ type Props = {
 
 const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
 
-    const {data:userData} = useLoadUserQuery(undefined, {});
+    const { data: userData } = useLoadUserQuery(undefined, {});
     const user = userData?.user
 
- 
+
     const [open, setOpen] = useState(false)
 
     const discountPercentage = ((data?.course?.estimatePrice - data?.course?.price) / data?.course?.estimatePrice) * 100;
@@ -34,6 +37,7 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
         setOpen(true)
     }
 
+console.log(data, "data")
 
 
 
@@ -117,7 +121,6 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
                             <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
                                 Course Details
 
-
                             </h1>
 
                             <p className="text-[18px] mt-[20px] whitespace-pre-line w-full overflow-hidden text-black dark:text-white">{data?.course.description}</p>
@@ -137,6 +140,76 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
                             </div>
 
                         </div>
+                        <br />
+
+
+                        {
+                            (data?.course?.reviews && [...data?.course?.reviews].reverse())?.map((item: any, index: number) => (
+                                <div className="w-full pb-4 dark:text-white" key={index}>
+                                    <div className="w-full flex">
+                                        <div className="w-[50px] h-[50px]">
+                                            <Image
+                                                src={item?.user.avatar ? item?.user?.avatar?.url : "https://imgs.search.brave.com/H-EWHnZrTM7Fp44-1C5jP5MFwCHtU_SEulqH5WtPHDE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzQxLzQ4LzU1/LzM2MF9GXzU0MTQ4/NTUwMF9XNkdOZHdi/R1lsMGVnSndHS0gx/VlJPclFnbDBQR0M0/VS5qcGc"}
+                                                alt=""
+                                                width={50}
+                                                height={50}
+                                                className="w-[50px] h-[50px] rounded-full object-cover"
+                                            />
+
+                                        </div>
+                                        <div className="mt-2 ml-3">
+                                            <h1 className="text-[18px]">{item?.user?.name}</h1>
+                                            <Ratings rating={item?.rating} />
+                                            <p>
+                                                {item.comment}
+                                            </p>
+                                            <small className="text-[#ffffff83]">
+
+                                                {format(item.createdAt)} *
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {
+                                        item.commentReplies.map((i: any, index: number) => (
+                                            <div key={index} className="w-full flex 800px:ml-16 my-5">
+                                                <div className="w-[50px] h-[50px]">
+                                                    <Image
+                                                        src={i.user?.avatar ? i?.user?.avatar?.url : "https://imgs.search.brave.com/H-EWHnZrTM7Fp44-1C5jP5MFwCHtU_SEulqH5WtPHDE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzQxLzQ4LzU1/LzM2MF9GXzU0MTQ4/NTUwMF9XNkdOZHdi/R1lsMGVnSndHS0gx/VlJPclFnbDBQR0M0/VS5qcGc"}
+                                                        alt=""
+                                                        width={50}
+                                                        height={50}
+                                                        className="w-[50px] h-[50px] rounded-full object-cover"
+                                                    />
+
+                                                </div>
+                                                <div className="pl-2">
+                                                    <h5 className="text-[20px]">
+                                                        <div className="flex items-center">
+                                                            {i?.user?.name} {i.user.role && <VscVerifiedFilled className="text-blue-700 ml-2" size={20} />}
+
+                                                        </div>
+
+                                                    </h5>
+                                                    <p>{i.comment}</p>
+                                                    <small className="text-[#ffffff83]">
+                                                        {format(i.createdAt)}
+
+                                                    </small>
+
+                                                </div>
+
+                                            </div>
+                                        ))
+                                    }
+
+                                </div>
+                            ))
+                        }
 
                     </div>
                     <div className="w-full 800px:w-[35%] relative">
@@ -210,7 +283,7 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
                                         stripePromise && clientSecret && (
                                             <Elements
                                                 stripe={stripePromise}
-                                                options={{clientSecret}}
+                                                options={{ clientSecret }}
                                             >
                                                 <CheckOutForm setOpen={setOpen} data={data} />
                                             </Elements>
