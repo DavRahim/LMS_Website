@@ -63,7 +63,7 @@ const CourseDetailsPage = ({ id }: Props) => {
             <Header open={open} setOpen={setOpen} activeItem={1} setRoute={setRoute} route={route} />
             {
               stripePromise && (
-                  <CourseDetails data={data} stripePromise={stripePromise} clientSecret={clientSecret}/>
+                  <CourseDetails data={data} stripePromise={stripePromise} clientSecret={clientSecret} setRoute={setRoute} setOpen={setOpen}/>
               )
             }
            

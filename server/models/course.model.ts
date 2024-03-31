@@ -38,7 +38,7 @@ interface ICourseData extends Document {
   // review: IReview[]
 }
 
-interface ICourse extends Document {
+export interface ICourse extends Document {
   name: string;
   description: string;
   categories: string; 
@@ -53,7 +53,7 @@ interface ICourse extends Document {
   reviews: IReview[];
   courseData: ICourseData[];
   rating?: number;
-  purchared?: number;
+  purchared: number;
 }
 
 const reviewSchema = new Schema<IReview>({

@@ -10,6 +10,10 @@ import { BiMessage } from "react-icons/bi";
 import { VscVerifiedFilled } from "react-icons/vsc";
 import Ratings from "@/app/utils/Ratings";
 
+import socketID from "socket.io-client";
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketID(ENDPOINT, { transports: ["websocket"] });
+
 type Props = {
     data: any;
     activeVideo: number;
@@ -29,11 +33,11 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
     const [questionId, setQuestionId] = useState("");
     const [isReviewReply, setIsReviewReply] = useState(false);
     const [reply, setReply] = useState("");
-const [reviewId, setReviewId] =useState("")
+    const [reviewId, setReviewId] = useState("")
 
 
 
-    const {data:courseData, refetch:courseRefetch} = useGetCoursesDetailsQuery(id, {refetchOnMountOrArgChange: true})
+    const { data: courseData, refetch: courseRefetch } = useGetCoursesDetailsQuery(id, { refetchOnMountOrArgChange: true })
 
     const course = courseData?.course;
 
@@ -43,7 +47,7 @@ const [reviewId, setReviewId] =useState("")
 
     const [addReviewInCourse, { isSuccess: reviewSuccess, error: reviewError, isLoading: reviewCreationLoading }] = useAddReviewInCourseMutation();
 
-    const [addReplyInReview, {isSuccess:replySuccess, error: replyError, isLoading:replyCreationLoading }] = useAddReplyInReviewMutation()
+    const [addReplyInReview, { isSuccess: replySuccess, error: replyError, isLoading: replyCreationLoading }] = useAddReplyInReviewMutation()
 
     const isReviewExists = course?.reviews?.find((item: any) => item.user._id === user._id);
 
@@ -62,11 +66,22 @@ const [reviewId, setReviewId] =useState("")
             setQuestion("");
             refetch()
             toast.success("Question added successfully")
+            socketId.emit("notification", {
+                title: "New Question Received",
+                message: `you have a new question in ${data[activeVideo].title}`,
+                userId:user._id
+            })
+            
         }
         if (answerSuccess) {
             setAnswer("");
             refetch()
             toast.success("Question added successfully")
+            socketId.emit("notification", {
+                title: "New Reply Received",
+                message: `you have a new Reply in Question ${data[activeVideo].title}`,
+                userId: user._id
+            })
         }
         if (error) {
             if ("data" in error) {
@@ -85,6 +100,11 @@ const [reviewId, setReviewId] =useState("")
             setRating(1);
             courseRefetch()
             toast.success("Review added success")
+            socketId.emit("notification", {
+                title: "New Review Received",
+                message: `you have a new question in ${data[activeVideo].title}`,
+                userId: user._id
+            })
         }
         if (reviewError) {
             if ("data" in reviewError) {
@@ -92,17 +112,17 @@ const [reviewId, setReviewId] =useState("")
                 toast.error(errorMessage.data.message);
             }
         }
-        if(replySuccess){
+        if (replySuccess) {
             setReply("")
             courseRefetch();
             toast.success("Reply added successfully")
         }
-  if (replyError) {
-      if ("data" in replyError) {
-          const errorMessage = replyError as any;
-        toast.error(errorMessage.data.message);
-    }
-}
+        if (replyError) {
+            if ("data" in replyError) {
+                const errorMessage = replyError as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
 
 
     }, [isSuccess, error, refetch, answerError, answerSuccess, reviewError, reviewSuccess, courseRefetch, replyError, replySuccess]);
@@ -121,8 +141,8 @@ const [reviewId, setReviewId] =useState("")
     }
 
 
-    const handleReviewReplySubmit =() => {
-        if(!replyCreationLoading){
+    const handleReviewReplySubmit = () => {
+        if (!replyCreationLoading) {
             if (reply === "") {
                 toast.error("Reply can't be empty")
             } else {
@@ -130,9 +150,9 @@ const [reviewId, setReviewId] =useState("")
             }
 
         }
-   
-        
-      
+
+
+
     }
 
     return (
@@ -220,7 +240,6 @@ const [reviewId, setReviewId] =useState("")
                         <br />
                         <br />
                         <div className="w-full h-[1px] bg-[#ffffff3b]">
-                            {/* TODO:question replay component */}
                             <CommentReply
                                 data={data}
                                 activeVideo={activeVideo}
@@ -286,101 +305,102 @@ const [reviewId, setReviewId] =useState("")
                             }
 
                             <br />
-    <div className="w-full h-[1px] bg-[#ffffff3b] text-black dark:text-white">
-    <div className="w-full">
-        {
-            course?.reviews && [...course?.reviews].reverse().map((item:any, index:number) => (
-                <div className="w-full my-5" key={index}>
-                    <div className="w-full flex">
-                        <div className="w-[50px] h-[50px]">
-                            <Image
-                                src={item?.user.avatar ? item?.user?.avatar?.url : "https://imgs.search.brave.com/H-EWHnZrTM7Fp44-1C5jP5MFwCHtU_SEulqH5WtPHDE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzQxLzQ4LzU1/LzM2MF9GXzU0MTQ4/NTUwMF9XNkdOZHdi/R1lsMGVnSndHS0gx/VlJPclFnbDBQR0M0/VS5qcGc"}
-                                alt=""
-                                width={50}
-                                height={50}
-                                className="w-[50px] h-[50px] rounded-full object-cover"
-                            />
+                            <div className="w-full h-[1px] bg-[#ffffff3b] text-black dark:text-white">
+                                <div className="w-full">
+                                    {
+                                        course?.reviews && [...course?.reviews].reverse().map((item: any, index: number) => (
+                                            <div className="w-full my-5" key={index}>
+                                                <div className="w-full flex">
+                                                    <div className="w-[50px] h-[50px]">
+                                                        <Image
+                                                            src={item?.user.avatar ? item?.user?.avatar?.url : "https://imgs.search.brave.com/H-EWHnZrTM7Fp44-1C5jP5MFwCHtU_SEulqH5WtPHDE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzQxLzQ4LzU1/LzM2MF9GXzU0MTQ4/NTUwMF9XNkdOZHdi/R1lsMGVnSndHS0gx/VlJPclFnbDBQR0M0/VS5qcGc"}
+                                                            alt=""
+                                                            width={50}
+                                                            height={50}
+                                                            className="w-[50px] h-[50px] rounded-full object-cover"
+                                                        />
 
-                        </div>
-                        <div className="mt-2 ml-3">
-                            <h1 className="text-[18px]">{item?.user?.name}</h1>
-                            <Ratings rating={item?.rating}/>
-                            <p>
-                                {item.comment}
-                            </p>
-                            <small className="text-[#ffffff83]">
+                                                    </div>
+                                                    <div className="mt-2 ml-3">
+                                                        <h1 className="text-[18px]">{item?.user?.name}</h1>
+                                                        <Ratings rating={item?.rating} />
+                                                        <p>
+                                                            {item.comment}
+                                                        </p>
+                                                        <small className="text-[#ffffff83]">
 
-                                {format(item.createdAt)} *
+                                                            {format(item.createdAt)} *
 
-                            </small>
+                                                        </small>
 
-                        </div>
-                            
-                    </div>
-               {
-                user.role === "admin" && (
-                    <span className={`${styles.label} !ml-10 cursor-pointer`}
-                    onClick={() =>{ 
-                        setReviewId(item._id),
-                        setIsReviewReply(true)}}>
-                        Add Reply
-                    </span>
-                )
-               }  
-                    {
-                        isReviewReply && (
-                            <div className="w-full flex relative">
-                                <input
-                                    placeholder="Enter your reply ... "
-                                    value={reply}
-                                    onChange={(e)=>setReply(e.target.value)}
-                                    type="text" className={`block 800px:mt-2 outline-none bg-transparent border-b border-[#fff] p-[5px] w-[95%]`} />
-                                    <button  onClick={handleReviewReplySubmit} type="submit" className="absolute right-0 bottom-1"> Submit</button>
-                            </div>
-                            
+                                                    </div>
 
-                        )
-                    }
-                    {
-                        item.commentReplies.map((i:any, index:number) => (
-                            <div key={index} className="w-full flex 800px:ml-16 my-5">
-                                <div className="w-[50px] h-[50px]">
-                                    <Image
-                                        src={i.user?.avatar ? i?.user?.avatar?.url : "https://imgs.search.brave.com/H-EWHnZrTM7Fp44-1C5jP5MFwCHtU_SEulqH5WtPHDE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzQxLzQ4LzU1/LzM2MF9GXzU0MTQ4/NTUwMF9XNkdOZHdi/R1lsMGVnSndHS0gx/VlJPclFnbDBQR0M0/VS5qcGc"}
-                                        alt=""
-                                        width={50}
-                                        height={50}
-                                        className="w-[50px] h-[50px] rounded-full object-cover"
-                                    />
+                                                </div>
+                                                {
+                                                    user.role === "admin" && (
+                                                        <span className={`${styles.label} !ml-10 cursor-pointer`}
+                                                            onClick={() => {
+                                                                setReviewId(item._id),
+                                                                    setIsReviewReply(true)
+                                                            }}>
+                                                            Add Reply
+                                                        </span>
+                                                    )
+                                                }
+                                                {
+                                                    isReviewReply && (
+                                                        <div className="w-full flex relative">
+                                                            <input
+                                                                placeholder="Enter your reply ... "
+                                                                value={reply}
+                                                                onChange={(e) => setReply(e.target.value)}
+                                                                type="text" className={`block 800px:mt-2 outline-none bg-transparent border-b border-[#fff] p-[5px] w-[95%]`} />
+                                                            <button onClick={handleReviewReplySubmit} type="submit" className="absolute right-0 bottom-1"> Submit</button>
+                                                        </div>
+
+
+                                                    )
+                                                }
+                                                {
+                                                    item.commentReplies.map((i: any, index: number) => (
+                                                        <div key={index} className="w-full flex 800px:ml-16 my-5">
+                                                            <div className="w-[50px] h-[50px]">
+                                                                <Image
+                                                                    src={i.user?.avatar ? i?.user?.avatar?.url : "https://imgs.search.brave.com/H-EWHnZrTM7Fp44-1C5jP5MFwCHtU_SEulqH5WtPHDE/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzQxLzQ4LzU1/LzM2MF9GXzU0MTQ4/NTUwMF9XNkdOZHdi/R1lsMGVnSndHS0gx/VlJPclFnbDBQR0M0/VS5qcGc"}
+                                                                    alt=""
+                                                                    width={50}
+                                                                    height={50}
+                                                                    className="w-[50px] h-[50px] rounded-full object-cover"
+                                                                />
+
+                                                            </div>
+                                                            <div className="pl-2">
+                                                                <h5 className="text-[20px]">
+                                                                    <div className="flex items-center">
+                                                                        {i?.user?.name} {i.user.role && <VscVerifiedFilled className="text-blue-700 ml-2" size={20} />}
+
+                                                                    </div>
+
+                                                                </h5>
+                                                                <p>{i.comment}</p>
+                                                                <small className="text-[#ffffff83]">
+                                                                    {format(i.createdAt)}
+
+                                                                </small>
+
+                                                            </div>
+
+                                                        </div>
+                                                    ))
+                                                }
+
+                                            </div>
+                                        ))
+                                    }
 
                                 </div>
-                                <div className="pl-2">
-                                    <h5 className="text-[20px]">
-                                        <div className="flex items-center">
-                                            {i?.user?.name} {i.user.role && <VscVerifiedFilled className="text-blue-700 ml-2" size={20} />}
-
-                                        </div>
-
-                                    </h5>
-                                    <p>{i.comment}</p>
-                                    <small className="text-[#ffffff83]">
-                                        {format(i.createdAt)}
-
-                                    </small>
-
-                                </div>
-
                             </div>
-                        ))
-                    }     
 
-                </div>
-            ))
-        }
-
-    </div>
-</div>    
-     
 
 
                         </>

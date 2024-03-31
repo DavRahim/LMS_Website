@@ -6,13 +6,14 @@ import CourseContentMedia from "./CourseContentMedia";
 import Header from "../Header";
 import CourseContentList from "./CourseContentList";
 
+
 type Props = {
     id: String;
     user: any;
 };
 
 const CourseContent = ({ id, user }: Props) => {
-    const { data: contentData, isLoading,refetch} = useGetCourseContentQuery(id,{refetchOnMountOrArgChange:true});
+    const { data: contentData, isLoading, refetch } = useGetCourseContentQuery(id, { refetchOnMountOrArgChange: true });
     const data = contentData?.content;
 
     const [activeVideo, setActiveVideo] = useState(0);

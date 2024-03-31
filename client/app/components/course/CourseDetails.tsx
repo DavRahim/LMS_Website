@@ -1,5 +1,5 @@
 import Ratings from "@/app/utils/Ratings";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import CoursePlayer from "../Admin/course/CoursePlayer";
@@ -17,16 +17,20 @@ type Props = {
     data: any;
     clientSecret: string;
     stripePromise: any;
+    setRoute: any;
+    setOpen: any;
 };
 
-const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
+const CourseDetails = ({ data, clientSecret, stripePromise, setOpen: openAuthModal, setRoute }: Props) => {
 
     const { data: userData } = useLoadUserQuery(undefined, {});
-    const user = userData?.user
-
-
+    const [user, setUser] =useState<any>()
+    // const user = userData?.user
     const [open, setOpen] = useState(false)
 
+    useEffect(()=>{
+        setUser(userData?.user)
+    }, [userData])
     const discountPercentage = ((data?.course?.estimatePrice - data?.course?.price) / data?.course?.estimatePrice) * 100;
 
     const discountPercentagePrice = discountPercentage.toFixed(0)
@@ -34,10 +38,15 @@ const CourseDetails = ({ data, clientSecret, stripePromise }: Props) => {
     const isPurchased = user && user?.courses?.find((item: any) => item?._id === data?.course?._id);
 
     const handleOrder = (e: any) => {
-        setOpen(true)
+        if (user) {
+
+            setOpen(true)
+        } else {
+            setRoute("Login");
+            openAuthModal(true)
+        }
     }
 
-console.log(data, "data")
 
 
 
@@ -285,7 +294,7 @@ console.log(data, "data")
                                                 stripe={stripePromise}
                                                 options={{ clientSecret }}
                                             >
-                                                <CheckOutForm setOpen={setOpen} data={data} />
+                                                <CheckOutForm user={user} setOpen={setOpen} data={data} />
                                             </Elements>
                                         )
                                     }

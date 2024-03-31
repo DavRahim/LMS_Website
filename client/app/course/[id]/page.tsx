@@ -4,10 +4,10 @@ import React from "react";
 
 type Props = {};
 
-const Page = ({params}:any) => {
+const Page = ({ params }: any) => {
   return (
     <div>
-          <CourseDetailsPage id={params.id}/>
+      <CourseDetailsPage id={params.id} />
     </div>
 
   );
