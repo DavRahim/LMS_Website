@@ -55,7 +55,7 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
         if (question.length === 0) {
             toast.error("Question can't be empty")
         } else {
-            console.log({ question, courseId: id, contentId: data[activeVideo]._id });
+            // console.log({ question, courseId: id, contentId: data[activeVideo]._id });
             addNewQuestion({ question, courseId: id, contentId: data[activeVideo]._id })
         }
     }
@@ -69,9 +69,9 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
             socketId.emit("notification", {
                 title: "New Question Received",
                 message: `you have a new question in ${data[activeVideo].title}`,
-                userId:user._id
+                userId: user._id
             })
-            
+
         }
         if (answerSuccess) {
             setAnswer("");
@@ -125,11 +125,11 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
         }
 
 
-    }, [isSuccess, error, refetch, answerError, answerSuccess, reviewError, reviewSuccess, courseRefetch, replyError, replySuccess]);
+    }, [isSuccess, error, refetch, answerError, answerSuccess, reviewError, reviewSuccess, courseRefetch, replyError, replySuccess, activeVideo, data, user]);
 
     const handleAnswerSubmit = () => {
         addAnswerInQuestion({ answer, courseId: id, contentId: data[activeVideo]._id, questionId })
-        console.log({ answer, courseId: id, contentId: data[activeVideo]._id, questionId });
+        // console.log({ answer, courseId: id, contentId: data[activeVideo]._id, questionId });
     }
 
     const handleReviewSubmit = async () => {
@@ -247,6 +247,7 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
                                 setAnswer={setAnswer}
                                 handleAnswerSubmit={handleAnswerSubmit}
                                 user={user}
+                                questionId={questionId}
                                 setQuestionId={setQuestionId}
                                 answerCreationLoading={answerCreationLoading}
 
@@ -337,7 +338,7 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
 
                                                 </div>
                                                 {
-                                                    user.role === "admin" && (
+                                                    user.role === "admin" && item.commentReplies.length === 0 && (
                                                         <span className={`${styles.label} !ml-10 cursor-pointer`}
                                                             onClick={() => {
                                                                 setReviewId(item._id),
@@ -348,7 +349,7 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
                                                     )
                                                 }
                                                 {
-                                                    isReviewReply && (
+                                                    isReviewReply && reviewId === item._id && (
                                                         <div className="w-full flex relative">
                                                             <input
                                                                 placeholder="Enter your reply ... "
@@ -412,7 +413,7 @@ const CourseContentMedia = ({ activeVideo, data, setActiveVideo, user, id, refet
 };
 
 
-const CommentReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, setQuestionId, answerCreationLoading }: any) => {
+const CommentReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, setQuestionId, answerCreationLoading, questionId }: any) => {
     return (
 
         <>
@@ -426,6 +427,7 @@ const CommentReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit
                             item={item}
                             setAnswer={setAnswer}
                             answer={answer}
+                            questionId={questionId}
                             setQuestionId={setQuestionId}
                             handleAnswerSubmit={handleAnswerSubmit}
                             answerCreationLoading={answerCreationLoading}
@@ -439,7 +441,7 @@ const CommentReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit
 }
 
 
-const CommentItem = ({ data, setQuestionId, item, answer, setAnswer, handleAnswerSubmit, answerCreationLoading }: any) => {
+const CommentItem = ({ data, setQuestionId, item, answer, setAnswer, handleAnswerSubmit, answerCreationLoading, questionId }: any) => {
     const [replayActive, setReplayActive] = useState(false)
     return (
         <>
@@ -486,7 +488,7 @@ const CommentItem = ({ data, setQuestionId, item, answer, setAnswer, handleAnswe
                     </span>
                 </div>
                 {
-                    replayActive && (
+                    replayActive && questionId === item._id && (
                         <>
                             {
                                 item.questionReplies.map((item: any, index: number) => (

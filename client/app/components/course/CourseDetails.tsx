@@ -47,7 +47,7 @@ const CourseDetails = ({ data, clientSecret, stripePromise, setOpen: openAuthMod
         }
     }
 
-
+// console.log(data);
 
 
     return (

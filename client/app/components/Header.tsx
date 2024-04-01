@@ -29,7 +29,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     const [active, setActive] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
 
-    const {data:userData, isLoading, refetch} = useLoadUserQuery(undefined, {});
+    const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {});
 
     // const { user } = useSelector((state: any) => state.auth)
     const { data } = useSession()
@@ -40,13 +40,13 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     })
     useEffect(() => {
         if (!isLoading) {
-            if (!userData){
+            if (!userData) {
                 if (data) {
                     socialAuth({ email: data?.user?.email, name: data?.user?.name, avatar: data?.user?.image })
                     refetch()
                 }
             }
-            
+
         }
         if (data === null) {
             if (isSuccess) {
@@ -57,7 +57,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             setLogout(true)
         }
 
-    }, [data, userData, socialAuth, isSuccess,refetch, isLoading]);
+    }, [data, userData, socialAuth, isSuccess, refetch, isLoading]);
 
 
 
@@ -128,9 +128,25 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                         <div className='fixed w-full h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]' onClick={handleClose} id='screen'>
                             <div className='w-[70%] fixed z-[9999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0'>
                                 <NavItem activeItem={activeItem} isMobile={true} />
-                                <HiOutlineUserCircle size={25} className='ml-5 cursor-pointer dark:text-white text-black'
+                                {/* <HiOutlineUserCircle size={25} className='ml-5 cursor-pointer dark:text-white text-black'
                                     onClick={() => setOpen(true)}
-                                />
+                                /> */}
+                                {
+                                    userData ? (
+                                        <Link href={"/profile"}>
+                                            <Image
+                                                src={userData?.user.avatar ? userData.user?.avatar?.url : avatar}
+                                                alt=''
+                                                width={30}
+                                                height={30}
+                                                className='w-[30px] h-[30] rounded-full cursor-pointer ml-[20px]'
+                                                style={{ border: activeItem === 5 ? "2px solid #ffc107" : "none" }}
+                                            />
+                                        </Link>
+                                    ) : <HiOutlineUserCircle size={25} className='hidden 800px:block cursor-pointer dark:text-white text-black'
+                                        onClick={() => setOpen(true)}
+                                    />
+                                }
                                 <br />
                                 <br />
                                 <p className='text-[16px] px-2 pl-5 text-black dark:text-white'>Copyright @ 2024 E-Learning</p>

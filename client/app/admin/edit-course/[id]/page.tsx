@@ -11,7 +11,7 @@ type Props = {};
 
 const page = ({params}:any) => {
     const id = params.id
-    console.log(id);
+    // console.log(id);
     return (
         <div>
             <Heading

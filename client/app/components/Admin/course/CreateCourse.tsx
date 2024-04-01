@@ -45,7 +45,7 @@ const CreateCourse = (props: Props) => {
         thumbnail: ''
     })
 
-    console.log(courseInfo);
+    // console.log(courseInfo);
 
     const [benefits, setBenefits] = useState([{ title: "" }])
     const [prerequisites, setPrerequisites] = useState([{ title: "" }])
@@ -68,7 +68,7 @@ const CreateCourse = (props: Props) => {
     ])
 
     const [courseData, setCourseData] = useState({})
-    console.log(courseData);
+    // console.log(courseData);
 
     const handleSubmit = async () => {
         // format benefits array

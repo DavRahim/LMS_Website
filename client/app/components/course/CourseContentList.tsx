@@ -78,7 +78,7 @@ const CourseContentList: FC<Props> = (props) => {
                             {isSectionVisible && (
                                 <div className="w-full">{
                                     sectionVideos.map((item: any, index: number) => {
-                                        console.log(item);
+                                        // console.log(item);
                                         const videoIndex: number = sectionStartIndex + index;
                                         const contentLength: number = item.videoLength / 60;
 

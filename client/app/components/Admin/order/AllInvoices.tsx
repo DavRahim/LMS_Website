@@ -67,108 +67,112 @@ const AllInvoices = ({ isDashboard }: Props) => {
 
     ];
 
+    // const rows: any = [
+    //     // mock data for testing;
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    //     {
+    //         id: "124894389894",
+    //         userName: "Abdur Rahim",
+    //         userEmail: "abc@gmail.com",
+    //         title: "React js course",
+    //         price: "$3939",
+    //         created_at: "2 days ago"
+
+    //     },
+    // ]
     const rows: any = [
-        // mock data for testing;
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
-        {
-            id: "124894389894",
-            userName: "Abdur Rahim",
-            userEmail: "abc@gmail.com",
-            title: "React js course",
-            price: "$3939",
-            created_at: "2 days ago"
-
-        },
     ]
+
+
 
     orderData && orderData?.forEach((item: any) => {
         rows.push({

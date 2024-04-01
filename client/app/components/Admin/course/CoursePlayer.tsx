@@ -13,14 +13,14 @@ const CoursePlayer: FC<Props> = ({ title, videoUrl }) => {
     otp: "",
     playbackInfo: ""
   })
-  console.log(videoUrl);
+  // console.log(videoUrl);
 
   useEffect(() => {
-    axios.post(`http://192.168.0.103:4000/api/v1/getVdoChiperOTP`, {
+    axios.post(`http://localhost:4000/api/v1/getVdoChiperOTP`, {
       videoId: videoUrl
     }).then((res) => {
 
-      console.log(res.data, "res.data");
+      // console.log(res.data, "res.data");
       setVideoData(res.data)
     })
   }, [videoUrl])

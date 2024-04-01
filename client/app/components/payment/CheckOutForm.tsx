@@ -63,7 +63,7 @@ const CheckOutForm = ({ data, setOpen,user}: Props) => {
 
             }
         }
-    }, [orderData, error, data])
+    }, [orderData, error, data, user])
 
     return (
         <form id="payment-form" onSubmit={handleSubmit}>
@@ -82,8 +82,6 @@ const CheckOutForm = ({ data, setOpen,user}: Props) => {
                         </div>
                     )
                 }
-
-
             </button>
 
 

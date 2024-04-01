@@ -50,7 +50,7 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
             }
         }
 
-    }, [isSuccess, data, setOpen, error]);
+    }, [isSuccess, data, setOpen, error,refetch]);
 
 
     return (

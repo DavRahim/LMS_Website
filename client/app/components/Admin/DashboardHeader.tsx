@@ -1,7 +1,7 @@
 "use client"
 import { ThemeSwitcher } from "@/app/utils/ThemeSwitcher"
 import { useGetAllNotificationsQuery, useUpdateNotificationStatusMutation } from "@/redux/features/notifications/notificationsApi";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoThermometer } from "react-icons/io5";
 import socketID from "socket.io-client";
@@ -21,12 +21,16 @@ const DashboardHeader: FC<Props> = ({open, setOpen}) => {
     });
     const [updateNotificationStatus, {isSuccess}] = useUpdateNotificationStatusMutation();
     const [notifications, setNotifications] = useState<any>([]);
-    const [audio] =useState(
-        new Audio("https://res.cloudinary.com/ds4wulbab/video/upload/v1711911227/hit6_fiznu2.ogg")
+
+    const audio = useRef<HTMLAudioElement | undefined>(
+        typeof Audio !== "undefined" ? new Audio("https://res.cloudinary.com/ds4wulbab/video/upload/v1711911227/hit6_fiznu2.ogg") : undefined
     );
+    // const [audio] = useState<HTMLAudioElement | undefined>(
+    //     typeof Audio !== "undefined" ? new Audio("https://res.cloudinary.com/ds4wulbab/video/upload/v1711911227/hit6_fiznu2.ogg") : undefined
+    // );
 
     const playerNotificationSound = () => {
-        audio.play()
+        audio.current?.play()
     };
     useEffect(()=>{
             if(data){
@@ -37,7 +41,7 @@ const DashboardHeader: FC<Props> = ({open, setOpen}) => {
             if(isSuccess){
                 refetch();
             }
-            audio.load()
+            audio.current?.load()
 
     }, [data, isSuccess, audio, refetch])
 
@@ -46,7 +50,7 @@ const DashboardHeader: FC<Props> = ({open, setOpen}) => {
             refetch();
             playerNotificationSound()
         })
-    }, [playerNotificationSound, refetch])
+    }, [refetch])
 
     const handleNotificationStatusChange = async(id:string) => {
         await updateNotificationStatus(id)
