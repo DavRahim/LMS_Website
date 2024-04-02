@@ -1,4 +1,5 @@
-import {Redis} from "ioredis"
+import  Redis from 'ioredis';
+// import {redis} from "ioredis"
 
 const redisClient= () => {
     if(process.env.REDIS_URL){

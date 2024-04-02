@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const auth_1 = require("../middleware/auth");
+const course_controllers_1 = require("../controllers/course.controllers");
+const user_controller_1 = require("../controllers/user.controller");
+const courseRouter = express_1.default.Router();
+courseRouter.post("/create-course", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRole)("admin"), course_controllers_1.uploadCourse);
+courseRouter.put("/edit-course/:id", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRole)("admin"), course_controllers_1.editCourse);
+courseRouter.get("/get-course/:id", course_controllers_1.getSingleCourse);
+courseRouter.get("/get-courses", course_controllers_1.getAllCourses);
+courseRouter.get("/get-course-content/:id", user_controller_1.updateAccessToken, auth_1.isAuthenticated, course_controllers_1.getCourseByUser);
+courseRouter.put("/add-question", user_controller_1.updateAccessToken, auth_1.isAuthenticated, course_controllers_1.addQuestion);
+courseRouter.put("/add-answer", user_controller_1.updateAccessToken, auth_1.isAuthenticated, course_controllers_1.addAnswer);
+courseRouter.put("/add-review/:id", user_controller_1.updateAccessToken, auth_1.isAuthenticated, course_controllers_1.addReview);
+courseRouter.put("/add-reply/", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRole)("admin"), course_controllers_1.addReplyToReview);
+courseRouter.get("/get-admin-Courses", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRole)("admin"), course_controllers_1.getAdminAllCourses);
+courseRouter.post("/getVdoChiperOTP", course_controllers_1.generateVideoUrl);
+courseRouter.delete("/deleted-course/:id", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRole)("admin"), course_controllers_1.deletedCourse);
+exports.default = courseRouter;
