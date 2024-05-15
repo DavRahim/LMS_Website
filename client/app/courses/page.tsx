@@ -31,25 +31,19 @@ const Page = (props: Props) => {
             setCourses(data?.courses)
 
         }
-
-
         if (category !== "All") {
             setCourses(
                 data?.courses.filter((item: any) => item?.categories === category)
             )
-
         }
         if (search) {
             setCourses(
                 data?.courses.filter((item: any) => item.name.toLowerCase().includes(search.toLocaleLowerCase()))
             )
         }
-
     }, [data, category, search])
 
     const categories = categoriesData?.layout.categories;
-
-
 
     return (
         <Suspense>
@@ -76,9 +70,7 @@ const Page = (props: Props) => {
                                         </div>
                                     ))
                                 }
-
                             </div>
-
                             {
                                 courses && courses.length === 0 && (
                                     <p className={`${styles.label} justify-center min-h-[50vh] flex items-center`}>
@@ -87,7 +79,6 @@ const Page = (props: Props) => {
                                     </p>
                                 )
                             }
-
                             <br />
                             <br />
                             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:gap-[25px] 1500px:grid-cols-4 1500px:gap-[35px] mb-12 border-0">
@@ -97,20 +88,11 @@ const Page = (props: Props) => {
                                     ))
                                 }
                             </div>
-
                         </div>
                         <Footer />
-
-
                     </>
-
                 )
-
-
             }
-
-
-
         </Suspense>);
 };
 
