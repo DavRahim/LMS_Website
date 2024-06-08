@@ -8,8 +8,10 @@ interface ProviderProps {
 }
 
 export function Providers({ children }: ProviderProps) {
-    return <Provider store={store}>
-        {children}
-    </Provider>
+    return (
+        <Provider store={store}>
+            {children}
+        </Provider>
+    )
 
 }
